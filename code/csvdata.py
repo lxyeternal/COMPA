@@ -1,9 +1,11 @@
 #_*_coding:utf-8_*_
 import csv
 import os
+import random
 
 cannel = []
-def Reader(filepath,d_path,e_path):
+remove_list = [1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 1, 5, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 3, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 4, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 2, 1, 1, 3, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 3, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 3, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 4, 4, 4, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2]
+def Reader(filepath,d_path,e_path,num1,num2):
 
     data_scv = open(filepath,'r')
     reader = csv.reader(data_scv)
@@ -29,6 +31,7 @@ def Reader(filepath,d_path,e_path):
         d_data = []
         e_data = []
         num_reader = int(len_data/4)
+        print (num_reader)
 
         for j in range(num_reader):
 
@@ -41,9 +44,11 @@ def Reader(filepath,d_path,e_path):
 
             if i[csv_start] != '(X)' and i[txt_start] != '(X)':
 
+                if i[csv_start] == '0':
+                    i[csv_start] = random.randint(100,200)
                 if i[csv_start] in die_char  or i[txt_start] in die_char:
-                    i[csv_start] = 0
-                    i[txt_start] = 0
+                    i[csv_start] = num1
+                    i[txt_start] = num2
                 # if i[csv_start] == '-' or i[csv_start] == '**' or i[csv_start] == '*****' or i[txt_start] == '-' or i[txt_start] == '**' or i[txt_start]:
                 #     i[csv_start] = 0
                 #     i[txt_start] = 0
@@ -60,17 +65,18 @@ def Reader(filepath,d_path,e_path):
 
     # cannel.append(cannel_de_list)
     # print (cannel)
-    print (len(one_d_info[1]))
-    print (len(one_e_info[1]))
-    for i in range(len(county_name)):
-        # print (len(one_d_info[i]))
-        for k in range(len(one_d_info[i])):
-            d.write(str(one_d_info[i][k]))
+    # print (len(one_d_info[1]))
+    # print (len(one_e_info[1]))
+    count = 0
+    for m in range(len(remove_list)):
+        for k in range(len(one_d_info[count])):
+            d.write(str(one_d_info[count][k]))
             d.write('    ')
-            e.write(str(one_e_info[i][k]))
+            e.write(str(one_e_info[count][k]))
             e.write('    ')
         d.write('\n')
         e.write('\n')
+        count = count + remove_list[m]
     d.close()
     e.close()
 
@@ -101,10 +107,12 @@ if __name__ == '__main__':
 
     for i in range(len(dir_csv_name)):
         print ("______")
+        num1 = 100 + i
+        num2 = 10+i
         csv_path_name = dir_csv_name[i]
         txt_d_path_name = dir_txt_name[2*i]
         txt_e_path_name = dir_txt_name[2*i+1]
-        Reader(csv_path_name,txt_d_path_name,txt_e_path_name)
+        Reader(csv_path_name,txt_d_path_name,txt_e_path_name,num1,num2)
 
 
 
